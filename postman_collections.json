@@ -1,0 +1,772 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+		"name": "Ecommerce API - Final Project (Komprehensif)",
+		"description": "# Dokumentasi Komprehensif Ecommerce API\n\nSelamat datang di dokumentasi API untuk Proyek Akhir mata kuliah **Pemrograman Mobile 2** (Semester 4).\n\nSistem backend ini adalah sebuah **Multi-tenant E-Commerce Service** berbasis **MySQL** dan **Express (TypeScript)** yang dirancang untuk mendukung pengujian API secara terisolasi antar tim kelompok mahasiswa. \n\n## 🌐 Server Production (Live Online)\nBackend API ini telah di-deploy secara resmi dan dapat diakses langsung secara publik tanpa perlu menjalankan local server:\n- **Base URL Utama**: `https://shop.tandurkarya.com` (Nilai Default Koleksi Ini)\n- **Base URL Lokal**: `http://localhost:3000` (Ganti variabel `baseUrl` di tab Variables jika ingin menguji lokal)\n\n## 💡 Konsep Multi-Tenant Berbasis Project\nUntuk mencegah tumpang tindih data antar kelompok mahasiswa saat menggunakan server database yang sama, arsitektur database kami dirancang dengan konsep isolasi data:\n1. Setiap tim kelompok mendaftarkan proyeknya di folder `Project` untuk mendapatkan `projectId` unik.\n2. Saat user mendaftar di folder `Auth`, user tersebut akan terikat dengan `projectId` kelompok Anda.\n3. Ketika user login, backend menghasilkan token **JSON Web Token (JWT)** yang mengemas informasi `userId`, `projectId`, dan `role` secara aman.\n4. Seluruh endpoint terproteksi selanjutnya (Kategori, Produk, Cart, Payment Method, Purchase) akan menyaring data secara otomatis berdasarkan `projectId` dari JWT token tersebut. Pengguna dari Project A tidak akan pernah bisa melihat atau memodifikasi data milik Project B.\n\n## 🛠️ Cara Otomatisasi Token di Postman\nKoleksi ini dirancang agar Anda **tidak perlu menyalin JWT token secara manual** setelah melakukan login:\n- Pada request **Login**, terdapat script otomatis (*Tests Script*) yang menangkap token dari response body server.\n- Token tersebut langsung disimpan ke dalam variabel koleksi bernama `token`.\n- Seluruh request di dalam folder terproteksi telah diatur untuk menggunakan tipe otorisasi **`Inherit auth from parent`**, yang secara otomatis melampirkan header `Authorization: Bearer {{token}}` pada setiap request secara transparan.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"item": [
+		{
+			"name": "Project",
+			"description": "Folder ini mengelola entitas Project. Sebelum menggunakan endpoint lainnya, setiap kelompok mahasiswa harus mendaftarkan identitas kelompoknya terlebih dahulu di sini untuk memperoleh `projectId` unik yang nantinya digunakan pada proses registrasi user.",
+			"item": [
+				{
+					"name": "Create Project",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"projectTitle\": \"Toko Elektronik Makmur\",\n  \"projectDescription\": \"Penjualan gadget terbaru\",\n  \"projectClass\": \"IF-22-B\",\n  \"projectTeam\": [\n    { \"name\": \"Ahmad Fulan\", \"nim\": \"22115501\" },\n    { \"name\": \"Jane Doe\", \"nim\": \"22115502\" }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/projects",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"projects"
+							]
+						},
+						"description": "Endpoint publik untuk mendaftarkan proyek baru kelompok mahasiswa. Mengirimkan detail informasi judul proyek, deskripsi kelas, serta daftar anggota tim beserta NIM masing-masing. Sistem akan mengembalikan ID proyek unik yang wajib disimpan."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Projects",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/projects",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"projects"
+							]
+						},
+						"description": "Mengambil seluruh daftar proyek kelompok mahasiswa yang terdaftar di dalam database beserta anggota timnya untuk memverifikasi pendaftaran proyek Anda."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"description": "Folder ini menangani autentikasi pengguna secara penuh. Mulai dari registrasi akun customer/admin, proses login untuk mendapatkan JWT Token, hingga pengecekan informasi profil akun yang sedang login saat ini.",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"projectId\": 1,\n  \"name\": \"Ahmad Fulan\",\n  \"email\": \"ahmad@example.com\",\n  \"password\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						},
+						"description": "Mendaftarkan user baru (customer) ke dalam database MySQL. Anda harus menyertakan `projectId` yang valid dari proyek kelompok Anda agar user ini terikat secara multi-tenant dengan proyek Anda."
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.success && jsonData.data && jsonData.data.token) {",
+									"    pm.collectionVariables.set(\"token\", jsonData.data.token);",
+									"    console.log(\"Token automatically saved to collection variables: \" + jsonData.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"ahmad@example.com\",\n  \"password\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "Melakukan login dengan kredensial email dan password. Jika berhasil, server akan merespons dengan JSON Web Token (JWT) yang berisi payload identitas user. Berkas Postman ini dilengkapi script khusus untuk secara otomatis menyimpan token ini ke variabel koleksi `token` sehingga tidak perlu Anda salin manual."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Profile (Me)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth/me",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"me"
+							]
+						},
+						"description": "Mengambil informasi akun profil user yang sedang aktif berdasarkan JWT token yang dikirim di header. Berguna untuk memvalidasi token masih aktif dan menampilkan profil di aplikasi mobile."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Category",
+			"description": "Folder ini berisi API CRUD untuk klasifikasi Kategori Produk. Kategori diisolasi secara otomatis berdasarkan `projectId` dari user yang sedang login.",
+			"item": [
+				{
+					"name": "Create Category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"categoryName\": \"Gadget\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/categories",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories"
+							]
+						},
+						"description": "Membuat kategori produk baru di bawah proyek Anda. Membutuhkan autentikasi JWT token kelompok Anda."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/categories",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"categories"
+							]
+						},
+						"description": "Mengambil semua kategori produk yang terdaftar khusus untuk proyek kelompok Anda saja."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"description": "Folder ini berisi endpoint CRUD lengkap untuk manajemen data Produk. Produk diisolasi berdasarkan `projectId` dan dapat dikaitkan dengan `categoryId` yang sudah dibuat sebelumnya.",
+			"item": [
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"categoryId\": 1,\n  \"productName\": \"iPhone 15 Pro\",\n  \"productDescription\": \"Super retina display phone\",\n  \"productPrice\": 20000000,\n  \"productStock\": 5,\n  \"productImage\": \"https://example.com/iphone15.jpg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						},
+						"description": "Membuat produk baru dengan mengaitkannya ke kategori produk tertentu. Data stok dan harga di sini akan divalidasi dan dihitung secara otomatis saat proses checkout pembelian dilakukan."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							]
+						},
+						"description": "Mengambil semua produk milik proyek Anda. Dapat difilter dengan query parameter `?categoryId=1` jika Anda hanya ingin menampilkan produk dalam kategori tertentu."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"1"
+							]
+						},
+						"description": "Mengambil detail produk lengkap berdasarkan ID produk. Mengembalikan error 404 jika produk tidak ditemukan atau berada di bawah project ID yang berbeda."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productPrice\": 19500000,\n  \"productStock\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/products/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"1"
+							]
+						},
+						"description": "Mengubah atau memperbarui informasi produk (seperti harga, stok, deskripsi, atau kategori) berdasarkan ID produk secara dinamis."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products",
+								"1"
+							]
+						},
+						"description": "Menghapus produk dari sistem berdasarkan ID produk."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"description": "Folder ini memuat API pengelolaan Keranjang Belanja (Cart) yang disimpan di database sisi server. Cart terikat secara otomatis pada user pembeli yang sedang login (`userId`).",
+			"item": [
+				{
+					"name": "Add Product to Cart",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": 1,\n  \"quantity\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/carts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"carts"
+							]
+						},
+						"description": "Menambahkan produk ke keranjang belanja Anda. Jika produk yang ditambahkan sudah ada di keranjang Anda, kuantitas produk tersebut akan otomatis berakumulasi (bertambah)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Cart Items",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/carts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"carts"
+							]
+						},
+						"description": "Mengambil semua daftar item di keranjang belanja milik user pembeli yang sedang aktif login saat ini. Sistem secara otomatis menyertakan join data detail produk (nama, harga, stok, deskripsi, dan gambar) untuk mempermudah render UI mobile."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Cart Item Qty",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"quantity\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/carts/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"carts",
+								"1"
+							]
+						},
+						"description": "Memperbarui kuantitas (quantity) item tertentu di dalam keranjang belanja berdasarkan ID item keranjang belanja."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Cart Item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/carts/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"carts",
+								"1"
+							]
+						},
+						"description": "Menghapus satu item produk tertentu dari dalam keranjang belanja."
+					},
+					"response": []
+				},
+				{
+					"name": "Clear Cart",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/carts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"carts"
+							]
+						},
+						"description": "Mengosongkan seluruh item produk di dalam keranjang belanja milik user yang login secara menyeluruh."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment Method",
+			"description": "Folder ini mengelola opsi metode pembayaran yang tersedia di dalam proyek Anda. Masing-masing tim kelompok mahasiswa dapat membuat opsi pembayaran kustom secara mandiri.",
+			"item": [
+				{
+					"name": "Create Payment Method",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"GoPay\",\n  \"type\": \"wallet\",\n  \"logoUrl\": \"https://example.com/gopay.png\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/payment-methods",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"payment-methods"
+							]
+						},
+						"description": "Membuat opsi metode pembayaran baru untuk proyek kelompok Anda. Parameter `type` wajib bernilai antara `'wallet'` (misal E-Wallet) atau `'bank'` (Transfer Bank)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Payment Methods",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/payment-methods",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"payment-methods"
+							]
+						},
+						"description": "Mengambil seluruh opsi metode pembayaran aktif yang terdaftar di bawah proyek kelompok Anda."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Payment Method By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/payment-methods/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"payment-methods",
+								"1"
+							]
+						},
+						"description": "Mengambil informasi detail opsi metode pembayaran tertentu berdasarkan ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Payment Method",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"GoPay Coins\",\n  \"logoUrl\": \"https://example.com/gopay-coins.png\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/payment-methods/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"payment-methods",
+								"1"
+							]
+						},
+						"description": "Memperbarui informasi nama, tipe, atau URL logo metode pembayaran berdasarkan ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Payment Method",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/payment-methods/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"payment-methods",
+								"1"
+							]
+						},
+						"description": "Menghapus opsi metode pembayaran berdasarkan ID dari sistem."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Purchase",
+			"description": "Folder ini mengontrol alur checkout transaksi pemesanan akhir serta riwayat transaksi pembelian user.",
+			"item": [
+				{
+					"name": "Checkout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"address\": \"Jalan Merdeka No. 45, Jakarta Pusat\",\n  \"paymentMethodId\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/purchases",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"purchases"
+							]
+						},
+						"description": "Endpoint utama untuk melakukan transaksi Checkout. Sistem secara otomatis:\n1. Memvalidasi kecukupan stok produk yang ada di keranjang belanja.\n2. Memvalidasi kecocokan `paymentMethodId` dengan proyek pembeli.\n3. Menghitung total harga belanja secara dinamis.\n4. Mengurangi stok produk di database secara otomatis.\n5. Menyimpan detail transaksi baru beserta alamat pengiriman (`address`) dan pilihan pembayaran.\n6. Memindahkan data keranjang ke detail invoice transaksi pemesanan produk (`purchase_items`).\n7. Mengosongkan keranjang belanja pembeli secara tuntas dalam satu kesatuan database transaksi (ACID)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Purchase History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/purchases",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"purchases"
+							]
+						},
+						"description": "Mengambil seluruh riwayat transaksi pembelian (order history) yang pernah dilakukan oleh user pembeli yang sedang aktif login."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Purchase By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/purchases/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"purchases",
+								"1"
+							]
+						},
+						"description": "Mengambil invoice detail lengkap transaksi tertentu berdasarkan ID transaksi pembelian. Response menyertakan objek `paymentMethod` yang digunakan, serta array `items` yang berisi barang-barang yang dibeli lengkap dengan nama dan gambar produk."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Purchase Status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"completed\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/purchases/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"purchases",
+								"1"
+							]
+						},
+						"description": "Mengubah status transaksi pembelian (misal: memproses, membatalkan, atau menyatakan transaksi selesai). Nilai `status` dapat disesuaikan."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://shop.tandurkarya.com",
+			"type": "string",
+			"description": "URL dasar API. Gunakan 'https://shop.tandurkarya.com' untuk production online atau 'http://localhost:3000' untuk server lokal Anda."
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string",
+			"description": "Token JWT. Variabel ini akan otomatis diisi oleh Test Script pasca login sukses."
+		}
+	]
+}
