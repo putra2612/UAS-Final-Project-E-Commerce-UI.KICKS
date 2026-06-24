@@ -1,3 +1,11 @@
+![Uploading Screenshot_2026-06-24-19-55-38-49_f73b71075b1de7323614b647fe394240.jpg…]()
+<img width="720" height="1600" alt="Screenshot_2026-06-24-19-56-30-75_f73b71075b1de7323614b647fe394240" src="https://github.com/user-attachments/assets/8f8cb399-5b18-4ba2-be62-7fe719a784e1" />
+<img width="720" height="1600" alt="Screenshot_2026-06-24-19-55-38-49_f73b71075b1de7323614b647fe394240" src="https://github.com/user-attachments/assets/59906f8d-c89f-427c-a667-2c6558242d94" />
+<img width="720" height="1600" alt="Screenshot_2026-06-24-19-56-11-47_f73b71075b1de7323614b647fe394240" src="https://github.com/user-attachments/assets/abccb936-175b-4ee0-bf5c-867c7d59b9f0" />
+<img width="720" height="1600" alt="Screenshot_2026-06-24-19-55-38-49_f73b71075b1de7323614b647fe394240" src="https://github.com/user-attachments/assets/59bd0f88-a8e5-4278-811c-f70433aec8a0" />
+<img width="720" height="1600" alt="Screenshot_2026-06-24-19-54-30-57_f73b71075b1de7323614b647fe394240" src="https://github.com/user-attachments/assets/e0b85f56-559d-406b-9da4-602af89a1c5e" />
+<img width="720" height="1600" alt="Screenshot_2026-06-24-19-54-46-99_f73b71075b1de7323614b647fe394240" src="https://github.com/user-attachments/assets/fa3549a0-0639-49bb-8911-07416eae086b" />
+<img width="720" height="1600" alt="Screenshot_2026-06-24-19-55-16-51_f73b71075b1de7323614b647fe394240" src="https://github.com/user-attachments/assets/c8c46fe5-a152-4277-a4cb-66e35310ae85" />
 # UAS Final Project - E-Commerce UI.KICKS
 
 Sistem Informasi E-Commerce Sepatu Streetwear Berbasis Mobile Application. Tugas ini disusun untuk memenuhi syarat Ujian Akhir Semester (UAS) pada program studi Teknik Informatika, Universitas Pelita Bangsa.
