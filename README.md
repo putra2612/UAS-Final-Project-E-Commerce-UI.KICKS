@@ -9,7 +9,7 @@ Sistem Informasi E-Commerce Sepatu Streetwear Berbasis Mobile Application. Tugas
 4. Ramadhan putra
 
 ## Deskripsi Project
-**UI.KICKS** adalah aplikasi mobile e-commerce inovatif yang dikembangkan menggunakan React Native dan Expo. Aplikasi ini dirancang khusus untuk memenuhi kebutuhan pasar pakaian dan sepatu streetwear bergaya *oversize* dan *edgy*. Aplikasi ini memberikan pengalaman belanja yang mulus, mulai dari penjelajahan produk hingga sistem riwayat transaksi yang rapi.
+**UI.KICKS** adalah aplikasi mobile e-commerce inovatif yang dikembangkan menggunakan React Native dan Expo. Aplikasi ini dirancang khusus untuk memenuhi kebutuhan pasar  sepatu streetwear bergaya *oversize* dan *edgy*. Aplikasi ini memberikan pengalaman belanja yang mulus, mulai dari penjelajahan produk hingga sistem riwayat transaksi yang rapi.
 
 ##  Fitur Utama Aplikasi
 1. **Beranda Interaktif & Iklan Auto-Scroll:** Menampilkan jajaran produk sepatu terbaru dengan visual tajam serta banner promo yang otomatis bergeser.
