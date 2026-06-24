@@ -1,11 +1,3 @@
-
-<img src="https://github.com/user-attachments/assets/8f8cb399-5b18-4ba2-be62-7fe719a784e1" width="350" alt="Screenshot_2026-06-24-19-56-30-75_f73b71075b1de7323614b647fe394240">
-<img src="https://github.com/user-attachments/assets/abccb936-175b-4ee0-bf5c-867c7d59b9f0"  width="350" alt="Screenshot_2026-06-24-19-56-11-47_f73b71075b1de7323614b647fe394240">
-<img src="https://github.com/user-attachments/assets/59bd0f88-a8e5-4278-811c-f70433aec8a0" width="350" alt="Screenshot_2026-06-24-19-55-38-49_f73b71075b1de7323614b647fe394240">
-<img src="https://github.com/user-attachments/assets/e0b85f56-559d-406b-9da4-602af89a1c5e" width="350" alt="Screenshot_2026-06-24-19-54-30-57_f73b71075b1de7323614b647fe394240">
-<img src="https://github.com/user-attachments/assets/c8c46fe5-a152-4277-a4cb-66e35310ae85" width="350" alt="Screenshot_2026-06-24-19-55-16-51_f73b71075b1de7323614b647fe394240">
-<img src="https://github.com/user-attachments/assets/fa3549a0-0639-49bb-8911-07416eae086b" width="350" alt="Screenshot_2026-06-24-19-54-46-99_f73b71075b1de7323614b647fe394240">
-
 # UAS Final Project - E-Commerce UI.KICKS
 
 Sistem Informasi E-Commerce Sepatu Streetwear Berbasis Mobile Application. Tugas ini disusun untuk memenuhi syarat Ujian Akhir Semester (UAS) pada program studi Teknik Informatika, Universitas Pelita Bangsa.
@@ -21,9 +13,19 @@ Sistem Informasi E-Commerce Sepatu Streetwear Berbasis Mobile Application. Tugas
 
 ##  Fitur Utama Aplikasi
 1. **Beranda Interaktif & Iklan Auto-Scroll:** Menampilkan jajaran produk sepatu terbaru dengan visual tajam serta banner promo yang otomatis bergeser.
+
+<img src="https://github.com/user-attachments/assets/e0b85f56-559d-406b-9da4-602af89a1c5e" width="150" alt="Screenshot_2026-06-24-19-54-30-57_f73b71075b1de7323614b647fe394240"><img src="https://github.com/user-attachments/assets/fa3549a0-0639-49bb-8911-07416eae086b" width="150" alt="Screenshot_2026-06-24-19-54-46-99_f73b71075b1de7323614b647fe394240"><img src="https://github.com/user-attachments/assets/c8c46fe5-a152-4277-a4cb-66e35310ae85" width="150" alt="Screenshot_2026-06-24-19-55-16-51_f73b71075b1de7323614b647fe394240">
+
 2. **Sistem Keranjang Belanja (Cart System):** Memungkinkan pengguna memasukkan produk pilihan, mengatur jumlah kuantitas barang, dan menghitung total harga secara *real-time*.
+<img src="https://github.com/user-attachments/assets/59bd0f88-a8e5-4278-811c-f70433aec8a0" width="150" alt="Screenshot_2026-06-24-19-55-38-49_f73b71075b1de7323614b647fe394240">
+
 3. **Halaman Checkout Dinamis:** Form pengisian data pengiriman yang interaktif untuk memudahkan proses transaksi pelanggan.
+<img src="https://github.com/user-attachments/assets/abccb936-175b-4ee0-bf5c-867c7d59b9f0"  width="150" alt="Screenshot_2026-06-24-19-56-11-47_f73b71075b1de7323614b647fe394240">
+
 4. **Halaman Profil & Riwayat Transaksi:** Menampilkan informasi personal pengguna dan daftar riwayat pembelian produk yang telah diselesaikan.
+<img src="https://github.com/user-attachments/assets/8f8cb399-5b18-4ba2-be62-7fe719a784e1" width="150" alt="Screenshot_2026-06-24-19-56-30-75_f73b71075b1de7323614b647fe394240">
+
+
 
 ##  Hasil Build Aplikasi (Android APK)
 Untuk menguji dan menginstal aplikasi langsung di perangkat Android, silakan unduh file APK mentah hasil build pada folder repositori melalui tautan di bawah ini:
@@ -33,6 +35,8 @@ Untuk menguji dan menginstal aplikasi langsung di perangkat Android, silakan und
 ##  Video Demo Aplikasi
 Berikut adalah tautan video rekaman layar (demo fitur) jalannya aplikasi UI.KICKS:
  **[Tonton Video Demo Aplikasi di Google Drive]( https://drive.google.com/file/d/1x0-iacHiZz7TGNeu7O8taGE3kQjrdNZz/view?usp=drivesdk )**
+
+
 
 
 
